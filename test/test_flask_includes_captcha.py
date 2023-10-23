@@ -2,9 +2,7 @@ import string
 import unittest
 from unittest.mock import Mock, patch
 
-
 from src.flask_includes_captcha import flask_includes_captcha
-
 
 
 class TestFlaskCaptcha(unittest.TestCase):
@@ -24,8 +22,6 @@ class TestFlaskCaptcha(unittest.TestCase):
         # Prepare mocks
         mock_data = captcha_mock.return_value
         mock_data.getvalue.return_value = b'Fake image'
-
-        #captcha_mock.return_value = b'Fake image'
 
         base64_mock.return_value = b'Fake image'
 
@@ -93,7 +89,6 @@ class TestFlaskCaptcha(unittest.TestCase):
     @patch('src.flask_includes_captcha.flask_includes_captcha.jwt.decode',
            side_effect='src.flask_includes_captcha.flask_includes_captcha.jwt.DecodeError')
     def test_verify_captcha_invalid_token(self, mock_jwt_decode):
-
         # Prepare Mocks
 
         mock_jwt_decode.side_effect = flask_includes_captcha.jwt.DecodeError
