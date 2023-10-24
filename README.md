@@ -22,7 +22,7 @@ Set up your app and  configure a secure Captcha Key:
 from flask import Flask
 
 app = Flask(__name__)
-app.config['Captcha_KEY'] = "use a secure key" #change this
+app.config['CAPTCHA_KEY'] = "use a secure key" #change this
 ``` 
 
 Import the Captcha class from this extension and initialize it with your app:
