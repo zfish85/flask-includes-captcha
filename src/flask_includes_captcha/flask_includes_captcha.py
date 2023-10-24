@@ -14,7 +14,7 @@ def generate_text(length=4):
     :return: Randomly generated text
     """
     characters = string.ascii_uppercase + string.digits
-    return ''.join(secrets.choice(characters) for i in range(length))
+    return ''.join(secrets.choice(characters) for _ in range(length))
 
 
 def generate_captcha(text):
@@ -43,24 +43,24 @@ class FlaskCaptcha:
 
     def create(self, length=4):
         """
-        Create a captcha image and its corresponding hash value.
+        Create a captcha image and its corresponding token.
 
         :param length: Length of the captcha text to be generated (default is 4).
-        :return: A dictionary containing the captcha image and its hash value.
+        :return: A dictionary containing the captcha image and its corresponding token.
         """
         text = generate_text(length)
-        hash_value = jwt.encode({"text": text}, self.key, algorithm="HS256")
-        return {"image": generate_captcha(text), "hash": hash_value}
+        token = jwt.encode({"text": text}, self.key, algorithm="HS256")
+        return {"image": generate_captcha(text), "token": token}
 
-    def verify(self, text, hash_value):
+    def verify(self, text, token):
         """
-        Verify if the provided text matches the hash value.
+        Verify if the provided text matches the token.
 
         :param text: The text to be verified.
-        :param hash_value: The hash value to compare against.
-        :return: True if the text matches the hash value, False otherwise.
+        :param token: The token to compare against.
+        :return: True if the text matches the token, False otherwise.
         """
         try:
-            return text == jwt.decode(hash_value, self.key, algorithms=["HS256"])["text"]
+            return text == jwt.decode(token, self.key, algorithms=["HS256"])["text"]
         except jwt.DecodeError:
             return False
