@@ -63,7 +63,7 @@ class TestFlaskCaptcha(unittest.TestCase):
 
         # Check result
 
-        self.assertEqual(result, {'image': "CAPTURE_BYTES", 'hash': "ENCODED_TEXT"})
+        self.assertEqual(result, {'image': "CAPTURE_BYTES", 'token': "ENCODED_TEXT"})
 
     @patch('src.flask_includes_captcha.flask_includes_captcha.jwt.decode')
     def test_verify_captcha(self, mock_jwt_decode):
