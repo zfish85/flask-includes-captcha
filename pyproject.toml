@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+exclude = ["test"]
+
+
+[project]
+name = "flask-includes-captcha"
+version = "0.1.0"
+dependencies = [
+    'captcha>=0.5.0',
+    'pyjwt>=2.8.0'
+]
+
+
