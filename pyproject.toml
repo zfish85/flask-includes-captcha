@@ -9,10 +9,27 @@ exclude = ["test"]
 
 [project]
 name = "flask-includes-captcha"
+description = "A simple, limited (basic) wrap of the popular Captcha library for Flask projects."
+authors = [
+    {name = "Martin Heisler", email = "stripedkitefish@gmail.com"},
+]
 version = "0.1.0"
 dependencies = [
     'captcha>=0.5.0',
-    'pyjwt>=2.8.0'
+    'pyjwt>=2.8.0',
+    'flask',
+    'flask-wtf'
+]
+readme = {file = "README.md", content-type = "text/markdown"}
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Web Environment",
+    "Framework :: Flask",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Topic :: Internet"
 ]
 
-
+[project.urls]
+"Homepage" = "https://github.com/zfish85/flask-includes-captcha"

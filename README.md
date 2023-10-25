@@ -28,9 +28,9 @@ app.config['CAPTCHA_KEY'] = "use a secure key" #change this
 Import the Captcha class from this extension and initialize it with your app:
 
 ```python
-from flask_includes_Captcha import FlaskCaptcha
+from flask_includes_captcha import FlaskCaptcha
 
-flask_Captcha = FlaskCaptcha(app)
+flask_captcha = FlaskCaptcha(app)
 ```
 
 Create a form that includes a string field for the text that should be compared and a 
@@ -59,7 +59,7 @@ from flask import render_template
 
 @app.route('/captcha', methods=["GET", "POST"])
 def captcha():
-    form = CustomForm()
+    form = ProtectedForm()
 
     if form.validate_on_submit():
         pass  # Start processing the form from here
@@ -69,7 +69,7 @@ def captcha():
 
     return render_template("form.html", captcha=captcha["image"], form=form)
 ```
-The Captcha must be rendered in the template:
+The Captcha must be rendered in the template (./templates/form.html):
 
 ```html
 <img src="data:image/png;base64,{{ captcha }}" alt="CAPTCHA">
