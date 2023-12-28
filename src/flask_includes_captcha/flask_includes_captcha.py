@@ -1,8 +1,9 @@
 import base64
+import json
 import secrets
 import string
 
-import jwt
+from joserfc import jwe, errors
 from captcha.image import ImageCaptcha
 from hashlib import sha256
 
@@ -57,7 +58,8 @@ class FlaskCaptcha:
         :return: A dictionary containing the captcha image and its corresponding token.
         """
         text = generate_text(length)
-        token = jwt.encode({"text": text}, self.key, algorithm="HS256")
+        header = {"alg": "A256KW", "enc": "A256GCM"}
+        token = jwe.encrypt_compact(header, json.dumps({"text": text}), self.key)
         return {"image": generate_captcha(text), "token": token}
 
     def verify(self, text, token):
@@ -68,7 +70,10 @@ class FlaskCaptcha:
         :param token: The token to compare against.
         :return: True if the text matches the token, False otherwise.
         """
+
         try:
-            return text == jwt.decode(token, self.key, algorithms=["HS256"])["text"]
-        except jwt.DecodeError:
+            plaintext_json = jwe.decrypt_compact(token, self.key).plaintext
+            plaintext = json.loads(plaintext_json)["text"]
+            return text == plaintext
+        except errors.DecodeError:
             return False
