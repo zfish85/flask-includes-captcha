@@ -88,4 +88,4 @@ The Captcha must be rendered in the template (./templates/form.html):
 - captcha
 - flask
 - flask-wtf
-- PyJWT
+- joserfc
