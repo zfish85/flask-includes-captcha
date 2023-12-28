@@ -8,6 +8,7 @@ captcha = "*"
 pyjwt = "*"
 flask = "*"
 flask-wtf = "*"
+joserfc = "*"
 
 [dev-packages]
 

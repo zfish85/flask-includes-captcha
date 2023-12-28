@@ -1,5 +1,6 @@
 import string
 import unittest
+from hashlib import sha256
 from unittest.mock import Mock, patch
 
 from src.flask_includes_captcha import flask_includes_captcha
@@ -15,6 +16,15 @@ class TestFlaskCaptcha(unittest.TestCase):
         text = flask_includes_captcha.generate_text()
         self.assertTrue(all(c in string.ascii_uppercase + string.digits for c in text))
         self.assertEqual(len(text), 4)
+
+    def test_set_key(self):
+        #
+        result = flask_includes_captcha.set_key("")
+        self.assertEqual(result, sha256(b"").digest())
+
+        # Testfall 2: Überprüfe, ob die Funktion für einen nicht-leeren String funktioniert
+        result = flask_includes_captcha.set_key("test123")
+        self.assertEqual(result, sha256(b"test123").digest())
 
     @patch('src.flask_includes_captcha.flask_includes_captcha.ImageCaptcha.generate')
     @patch('src.flask_includes_captcha.flask_includes_captcha.base64.b64encode')
@@ -58,7 +68,7 @@ class TestFlaskCaptcha(unittest.TestCase):
         # Check if Mocks called with correct parameters
 
         mock_generate_text.assert_called_once()
-        mock_jwt_encode.assert_called_once_with({"text": "TEXT"}, self.app.config["CAPTCHA_KEY"], algorithm="HS256")
+        mock_jwt_encode.assert_called_once_with({"text": "TEXT"}, self.captcha.key, algorithm="HS256")
         mock_generate_captcha.assert_called_once_with("TEXT")
 
         # Check result
@@ -80,7 +90,7 @@ class TestFlaskCaptcha(unittest.TestCase):
 
         # Check if mock is called
 
-        mock_jwt_decode.assert_called_once_with("hash_value", self.app.config["CAPTCHA_KEY"], algorithms=["HS256"])
+        mock_jwt_decode.assert_called_once_with("hash_value", self.captcha.key, algorithms=["HS256"])
 
         # Check result
 
@@ -99,7 +109,7 @@ class TestFlaskCaptcha(unittest.TestCase):
 
         # Check if mock is called
 
-        mock_jwt_decode.assert_called_once_with("invalid_token", self.app.config["CAPTCHA_KEY"], algorithms=["HS256"])
+        mock_jwt_decode.assert_called_once_with("invalid_token", self.captcha.key, algorithms=["HS256"])
 
         # Check result
 

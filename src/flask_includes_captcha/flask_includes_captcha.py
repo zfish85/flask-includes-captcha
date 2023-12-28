@@ -4,6 +4,7 @@ import string
 
 import jwt
 from captcha.image import ImageCaptcha
+from hashlib import sha256
 
 
 def generate_text(length=4):
@@ -30,8 +31,15 @@ def generate_captcha(text):
     return base64.b64encode(data.getvalue()).decode("utf-8")
 
 
+def set_key(captcha_key):
+    m = sha256()
+    m.update(captcha_key.encode("utf-8"))
+    return m.digest()
+
+
 class FlaskCaptcha:
     """Flask extension class to create and verify captchas"""
+
     def __init__(self, app=None):
         self.key = None
         if app is not None:
@@ -39,7 +47,7 @@ class FlaskCaptcha:
 
     def init_app(self, app):
 
-        self.key = app.config["CAPTCHA_KEY"]
+        self.key = set_key(app.config["CAPTCHA_KEY"])
 
     def create(self, length=4):
         """
